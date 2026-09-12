@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Brief</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Raleway:wght@400;500;600&display=swap');
+
+:root{
+  --paper:#FAF8F5; --ink:#1A1A1A; --moss:#4A5D4F; --gray:#9B9B9B;
+  --faint:rgba(0,0,0,0.10); --bodymuted:#3f3f3f; --bodysec:#6a6a6a;
+  --sans:'Instrument Sans',sans-serif;
+  --serif:'Instrument Serif',serif;
+  --mono:'JetBrains Mono',monospace;
+  --body:'Raleway',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{
+  background:var(--paper); color:var(--ink);
+  font-family:var(--body); font-size:16px; line-height:1.62;
+  overflow-x:hidden; max-width:100vw;
+  -webkit-font-smoothing:antialiased;
+}
+img,iframe{max-width:100%;}
+
+.wrap{ max-width:660px; margin:0 auto; padding:64px 28px 96px; }
+@media (max-width:520px){ .wrap{ padding:44px 20px 72px; } }
+
+.eyebrow{ font-family:var(--mono); font-weight:500; font-size:10.5px; letter-spacing:0.28em;
+  text-transform:uppercase; color:var(--gray); margin:40px 0 18px; }
+.eyebrow:first-child{ margin-top:0; }
+.eyebrow .n{ color:var(--moss); }
+.eyebrow .sep{ color:var(--gray); margin:0 6px; }
+
+h1{ font-family:var(--sans); font-weight:600; font-size:34px; letter-spacing:-0.03em;
+  line-height:1.1; margin:14px 0 16px; }
+h1 em{ font-family:var(--serif); font-style:italic; font-weight:400; color:var(--moss); }
+@media (max-width:520px){ h1{ font-size:28px; } }
+
+.lede{ font-family:var(--body); font-size:16px; color:var(--bodymuted); line-height:1.66; max-width:52ch; }
+
+.rule{ height:1px; background:var(--faint); margin:44px 0; border:0; }
+
+.field{ margin:26px 0; }
+.field label.k{ display:block; font-family:var(--mono); font-weight:500; font-size:10px;
+  letter-spacing:0.16em; text-transform:uppercase; color:var(--gray); margin-bottom:10px; }
+.field label.k .req{ color:var(--moss); }
+.field .hint{ font-family:var(--body); font-size:13px; color:var(--bodysec); margin:-4px 0 10px; }
+
+.field input[type=text], .field input[type=email], .field input[type=tel], .field textarea{
+  width:100%; font-family:var(--body); font-size:16px; color:var(--ink);
+  background:transparent; border:0; border-bottom:1px solid var(--faint);
+  padding:8px 0; line-height:1.5; border-radius:0; -webkit-appearance:none; appearance:none;
+}
+.field textarea{ resize:vertical; min-height:76px; }
+.field input:focus, .field textarea:focus{ outline:0; border-bottom-color:var(--moss); }
+.field input::placeholder, .field textarea::placeholder{ color:#c4c0ba; }
+
+.err{ font-family:var(--mono); font-size:10px; letter-spacing:0.06em; color:var(--moss);
+  margin-top:7px; display:none; }
+.field.invalid .err{ display:block; }
+.field.invalid input, .field.invalid textarea{ border-bottom-color:var(--moss); }
+
+/* the two big options */
+.optnote{ font-family:var(--body); font-size:14px; color:var(--bodysec); margin:2px 0 16px; }
+.opt{ display:flex; align-items:flex-start; gap:16px; cursor:pointer;
+  border:1px solid var(--faint); border-left:2px solid transparent;
+  padding:18px 18px 16px; margin-bottom:12px; transition:border-color .18s ease; }
+.opt:hover{ border-color:var(--gray); }
+.opt.sel{ border-color:var(--moss); border-left:2px solid var(--moss); }
+.opt .dot{ flex-shrink:0; width:16px; height:16px; border:1.5px solid var(--gray);
+  border-radius:50%; margin-top:3px; position:relative; transition:border-color .18s; }
+.opt.sel .dot{ border-color:var(--moss); }
+.opt.sel .dot::after{ content:''; position:absolute; inset:3px; background:var(--moss); border-radius:50%; }
+.opt .txt h3{ font-family:var(--sans); font-weight:600; font-size:16px; letter-spacing:-0.01em; margin-bottom:3px; }
+.opt .txt p{ font-family:var(--body); font-size:13.5px; color:var(--bodysec); line-height:1.5; }
+.opt .tag{ font-family:var(--mono); font-size:9px; letter-spacing:0.18em; text-transform:uppercase; color:var(--gray); }
+
+.optslim{ display:flex; align-items:center; gap:12px; cursor:pointer; padding:12px 2px; }
+.optslim .dot{ flex-shrink:0; width:14px; height:14px; border:1.5px solid var(--gray); border-radius:50%; position:relative; }
+.optslim.sel .dot{ border-color:var(--moss); }
+.optslim.sel .dot::after{ content:''; position:absolute; inset:3px; background:var(--moss); border-radius:50%; }
+.optslim span{ font-family:var(--body); font-size:14.5px; color:var(--bodymuted); }
+.optslim.sel span{ color:var(--ink); }
+
+/* multi-select toggle rows */
+.toggle{ display:flex; align-items:center; gap:14px; cursor:pointer; padding:13px 0; border-top:1px solid var(--faint); }
+.toggle:last-of-type{ border-bottom:1px solid var(--faint); }
+.toggle .box{ flex-shrink:0; width:15px; height:15px; border:1.5px solid var(--gray); position:relative; transition:border-color .16s; }
+.toggle.on .box{ border-color:var(--moss); }
+.toggle.on .box::after{ content:''; position:absolute; inset:3px; background:var(--moss); }
+.toggle span{ font-family:var(--mono); font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--bodymuted); }
+.toggle.on span{ color:var(--ink); }
+
+/* reassurance */
+.assure{ font-family:var(--body); font-size:14.5px; color:var(--bodymuted); line-height:1.6; margin:2px 0 22px; max-width:54ch; }
+.assure em{ font-family:var(--serif); font-style:italic; color:var(--moss); }
+
+/* upload zone */
+.upload{ border:1px dashed rgba(0,0,0,0.20); padding:26px 20px; text-align:center; cursor:pointer; transition:border-color .18s; }
+.upload:hover{ border-color:var(--moss); }
+.upload .u-lead{ font-family:var(--mono); font-weight:500; font-size:10px; letter-spacing:0.18em;
+  text-transform:uppercase; color:var(--moss); margin-bottom:8px; }
+.upload p{ font-family:var(--body); font-size:14px; color:var(--bodysec); }
+.chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+.chip{ font-family:var(--mono); font-size:10px; letter-spacing:0.04em; color:var(--ink);
+  border:1px solid var(--faint); padding:6px 10px; display:flex; gap:9px; align-items:center; }
+.chip .x{ color:var(--moss); cursor:pointer; font-weight:600; line-height:1; }
+
+/* submit */
+.submit{ margin-top:44px; }
+button.go{ font-family:var(--mono); font-weight:500; font-size:12px; letter-spacing:0.18em; text-transform:uppercase;
+  color:var(--moss); background:transparent; border:1px solid var(--moss);
+  padding:16px 34px; cursor:pointer; transition:all .18s ease; }
+button.go:hover{ background:var(--moss); color:var(--paper); }
+button.go:disabled{ opacity:.5; cursor:default; }
+.formnote{ font-family:var(--body); font-size:13px; color:var(--bodysec); margin-top:16px; }
+
+.foot{ margin-top:64px; font-family:var(--mono); font-size:9.5px; letter-spacing:0.2em;
+  text-transform:uppercase; color:var(--gray); }
+.foot .d{ color:var(--faint); margin:0 6px; }
+
+.hp{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+
+#done{ display:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div id="form">
+    <div class="eyebrow"><span class="n">001</span><span class="sep">/</span>PROJECT BRIEF</div>
+    <h1>Tell me about the site you <em>need.</em></h1>
+    <p class="lede">A few honest questions so I can scope your project properly and get moving fast. Takes about two minutes. Be as specific as you can.</p>
+
+    <hr class="rule">
+
+    <!-- 01 YOU -->
+    <div class="eyebrow"><span class="n">01</span><span class="sep">/</span>YOU</div>
+
+    <div class="field" data-req>
+      <label class="k">Full name <span class="req">*</span></label>
+      <input type="text" id="full_name" placeholder="Your name">
+      <div class="err">I need a name to reach you by.</div>
+    </div>
+    <div class="field" data-req data-type="email">
+      <label class="k">Email <span class="req">*</span></label>
+      <input type="email" id="email" placeholder="you@business.com">
+      <div class="err">A valid email, please.</div>
+    </div>
+    <div class="field" data-req>
+      <label class="k">Phone / WhatsApp <span class="req">*</span></label>
+      <input type="tel" id="phone" placeholder="+234 ...">
+      <div class="err">Best number to reach you on.</div>
+    </div>
+    <div class="field" data-req>
+      <label class="k">Business name <span class="req">*</span></label>
+      <input type="text" id="company" placeholder="What the business is called">
+      <div class="err">Tell me the business name.</div>
+    </div>
+
+    <hr class="rule">
+
+    <!-- 02 BUSINESS -->
+    <div class="eyebrow"><span class="n">02</span><span class="sep">/</span>YOUR BUSINESS</div>
+
+    <div class="field" data-req>
+      <label class="k">What does your business do, in one line <span class="req">*</span></label>
+      <input type="text" id="business_does" placeholder="e.g. We sell handmade leather bags in Port Harcourt">
+      <div class="err">One line is enough. What do you do.</div>
+    </div>
+    <div class="field">
+      <label class="k">Who are your customers</label>
+      <input type="text" id="customers" placeholder="Who buys from you">
+    </div>
+    <div class="field">
+      <label class="k">Current website or social links</label>
+      <input type="text" id="current_web" placeholder="Instagram, a site, anything you have now">
+    </div>
+
+    <hr class="rule">
+
+    <!-- 03 THE PROJECT -->
+    <div class="eyebrow"><span class="n">03</span><span class="sep">/</span>THE PROJECT</div>
+    <p class="optnote">What are we building. Pick the one that fits.</p>
+
+    <div class="opt" data-val="landing">
+      <div class="dot"></div>
+      <div class="txt">
+        <span class="tag">Fast · focused</span>
+        <h3>Landing page</h3>
+        <p>One strong page. Says who you are, what you offer, and pushes people to call, message, or buy. Live quickly.</p>
+      </div>
+    </div>
+
+    <div class="opt" data-val="full">
+      <div class="dot"></div>
+      <div class="txt">
+        <span class="tag">Complete · scalable</span>
+        <h3>Full website</h3>
+        <p>Multiple pages. Home, about, services, gallery, contact, and more. Room to grow as the business grows.</p>
+      </div>
+    </div>
+
+    <div class="optslim" data-val="unsure">
+      <div class="dot"></div>
+      <span>Not sure yet. Help me decide what I need.</span>
+    </div>
+    <div class="field" data-req data-hidden style="margin-top:4px">
+      <div class="err" style="margin-top:14px">Pick one option above.</div>
+    </div>
+
+    <div class="field" style="margin-top:30px">
+      <label class="k">What should it be able to do</label>
+      <div id="features">
+        <div class="toggle" data-val="Contact form"><div class="box"></div><span>Contact form</span></div>
+        <div class="toggle" data-val="WhatsApp chat button"><div class="box"></div><span>WhatsApp chat button</span></div>
+        <div class="toggle" data-val="Online payments"><div class="box"></div><span>Online payments</span></div>
+        <div class="toggle" data-val="Booking / scheduling"><div class="box"></div><span>Booking / scheduling</span></div>
+        <div class="toggle" data-val="Online store"><div class="box"></div><span>Online store</span></div>
+        <div class="toggle" data-val="Photo gallery"><div class="box"></div><span>Photo gallery</span></div>
+        <div class="toggle" data-val="Blog / news"><div class="box"></div><span>Blog / news</span></div>
+      </div>
+    </div>
+
+    <hr class="rule">
+
+    <!-- 04 ASSETS -->
+    <div class="eyebrow"><span class="n">04</span><span class="sep">/</span>ASSETS</div>
+    <p class="assure">Whatever you already have, send it here; logo, icons, brand colours, photos, anything. Don't have all of it? <em>Relax.</em> Send what you've got, and whatever's missing, I can create for you.</p>
+
+    <div class="field">
+      <label class="k">Upload your assets</label>
+      <p class="hint">Logos, icons, photos, screenshots. Tap to add images. You can add a few.</p>
+      <div class="upload" id="dropzone">
+        <div class="u-lead">Add images</div>
+        <p>Tap here to choose files from your device</p>
+      </div>
+      <input type="file" id="filepick" accept="image/*" multiple class="hp">
+      <div class="chips" id="chips"></div>
+    </div>
+
+    <div class="field">
+      <label class="k" style="font-weight:700;color:var(--ink);font-size:11px">Or drop links to your assets</label>
+      <textarea id="asset_links" placeholder="Google Drive, WeTransfer, Instagram, a Figma file, anywhere they live"></textarea>
+    </div>
+
+    <div class="field">
+      <label class="k">Want me to create any of these for you</label>
+      <p class="hint">Tick anything you don't have and would like me to make.</p>
+      <div id="help">
+        <div class="toggle" data-val="Logo"><div class="box"></div><span>Logo</span></div>
+        <div class="toggle" data-val="Brand colours & identity"><div class="box"></div><span>Brand colours &amp; identity</span></div>
+        <div class="toggle" data-val="Icons / graphics"><div class="box"></div><span>Icons / graphics</span></div>
+        <div class="toggle" data-val="Written content / copy"><div class="box"></div><span>Written content / copy</span></div>
+        <div class="toggle" data-val="Product / lifestyle images"><div class="box"></div><span>Product / lifestyle images</span></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="k">If you own a domain, which one</label>
+      <input type="text" id="domain" placeholder="e.g. mybusiness.com  (leave blank if none)">
+    </div>
+
+    <div class="field">
+      <label class="k">Any sites you like the look of</label>
+      <textarea id="likes" placeholder="Paste one or two links, or describe the feel you want"></textarea>
+    </div>
+
+    <!-- honeypot -->
+    <div class="hp"><label>Leave this empty<input type="text" id="hp_website" tabindex="-1" autocomplete="off"></label></div>
+
+    <div class="submit">
+      <button class="go" id="send">Send my brief</button>
+      <p class="formnote">I read every one of these myself. You will hear back within 24 hours.</p>
+    </div>
+
+  </div>
+
+  <!-- success -->
+  <div id="done">
+    <div class="eyebrow"><span class="n">001</span><span class="sep">/</span>RECEIVED</div>
+    <h1>Got it. <em>Thanks.</em></h1>
+    <p class="lede">Your brief just landed with me. I will go through it properly and reach out on WhatsApp or email within 24 hours with clear next steps. Talk soon.</p>
+  </div>
+
+</div>
+
+<script>
+// ---- Supabase wiring (fill these in Phase 2) ----
+const SUPABASE_URL = "https://gixgfgvtofqiokhlqtkc.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpeGdmZ3Z0b2ZxaW9raGxxdGtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxNTk5NjcsImV4cCI6MjEwNDczNTk2N30.fKd9adWBilBwta_oSINoShsF2ptqI9nZ1ofawf4bD70";
+const TABLE = "intakes";
+const BUCKET = "assets";
+// -------------------------------------------------
+
+let projectType = "";
+let selectedFiles = [];
+
+// single-choice project options
+document.querySelectorAll('.opt, .optslim').forEach(el=>{
+  el.addEventListener('click', ()=>{
+    document.querySelectorAll('.opt, .optslim').forEach(o=>o.classList.remove('sel'));
+    el.classList.add('sel');
+    projectType = el.dataset.val;
+    document.querySelector('[data-hidden] .err').style.display='none';
+  });
+});
+
+// multi toggles
+document.querySelectorAll('.toggle').forEach(t=>{
+  t.addEventListener('click', ()=> t.classList.toggle('on'));
+});
+function collectToggles(id){
+  return [...document.querySelectorAll('#'+id+' .toggle.on')].map(t=>t.dataset.val).join(', ');
+}
+
+// file picker
+const pick = document.getElementById('filepick');
+document.getElementById('dropzone').addEventListener('click', ()=> pick.click());
+pick.addEventListener('change', ()=>{
+  [...pick.files].forEach(f=>{
+    if(!f.type.startsWith('image/')) return;
+    if(f.size > 6*1024*1024){ alert(f.name + ' is over 6MB, skipping it.'); return; }
+    if(selectedFiles.length >= 8){ alert('That is enough images for now (max 8).'); return; }
+    selectedFiles.push(f);
+  });
+  pick.value = '';
+  renderChips();
+});
+function renderChips(){
+  const c = document.getElementById('chips'); c.innerHTML='';
+  selectedFiles.forEach((f,i)=>{
+    const el=document.createElement('div'); el.className='chip';
+    el.innerHTML = '<span>'+f.name+'</span><span class="x" data-i="'+i+'">&times;</span>';
+    c.appendChild(el);
+  });
+  c.querySelectorAll('.x').forEach(x=>{
+    x.addEventListener('click', e=>{ selectedFiles.splice(+e.target.dataset.i,1); renderChips(); });
+  });
+}
+
+function val(id){ return (document.getElementById(id).value || '').trim(); }
+function emailOk(s){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s); }
+
+function validate(){
+  let ok = true, firstBad = null;
+  document.querySelectorAll('.field[data-req]').forEach(f=>{
+    f.classList.remove('invalid');
+    if(f.hasAttribute('data-hidden')) return;
+    const input = f.querySelector('input,textarea');
+    let bad = !input || !input.value.trim();
+    if(!bad && f.dataset.type==='email') bad = !emailOk(input.value.trim());
+    if(bad){ f.classList.add('invalid'); ok=false; if(!firstBad) firstBad=f; }
+  });
+  if(!projectType){
+    document.querySelector('[data-hidden] .err').style.display='block'; ok=false;
+    if(!firstBad) firstBad = document.querySelector('.opt');
+  }
+  if(firstBad) firstBad.scrollIntoView({behavior:'smooth', block:'center'});
+  return ok;
+}
+
+async function uploadFiles(){
+  const urls=[];
+  for(let i=0;i<selectedFiles.length;i++){
+    const f=selectedFiles[i];
+    const safe=f.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+    const path=Date.now()+'-'+i+'-'+safe;
+    const res=await fetch(SUPABASE_URL+'/storage/v1/object/'+BUCKET+'/'+path,{
+      method:'POST',
+      headers:{ 'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY,'Content-Type':f.type||'application/octet-stream' },
+      body:f
+    });
+    if(!res.ok) throw new Error('upload failed: '+await res.text());
+    urls.push(SUPABASE_URL+'/storage/v1/object/public/'+BUCKET+'/'+path);
+  }
+  return urls;
+}
+
+function payload(assetUrls){
+  return {
+    full_name: val('full_name'),
+    email: val('email'),
+    phone: val('phone'),
+    company: val('company'),
+    business_does: val('business_does'),
+    customers: val('customers'),
+    current_web: val('current_web'),
+    project_type: projectType,
+    features: collectToggles('features'),
+    asset_files: assetUrls.join(', '),
+    asset_links: val('asset_links'),
+    help_create: collectToggles('help'),
+    domain: val('domain'),
+    likes: val('likes')
+  };
+}
+
+const btn = document.getElementById('send');
+btn.addEventListener('click', async ()=>{
+  if(document.getElementById('hp_website').value) return; // spam bot, drop silently
+  if(!validate()) return;
+
+  btn.disabled = true; btn.textContent = 'Sending...';
+  const notConnected = SUPABASE_URL.includes('YOUR-PROJECT-REF');
+
+  try{
+    let assetUrls = [];
+    if(notConnected){
+      assetUrls = selectedFiles.map(f=>f.name); // demo: just names
+    } else if(selectedFiles.length){
+      assetUrls = await uploadFiles();
+    }
+    const data = payload(assetUrls);
+
+    if(notConnected){
+      console.log('DEMO MODE (Supabase not wired yet). Payload:', data);
+      await new Promise(r=>setTimeout(r, 600));
+    } else {
+      const res = await fetch(SUPABASE_URL+'/rest/v1/'+TABLE, {
+        method:'POST',
+        headers:{
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+          'Content-Type':'application/json',
+          'Prefer':'return=minimal'
+        },
+        body: JSON.stringify(data)
+      });
+      if(!res.ok) throw new Error(await res.text());
+    }
+    document.getElementById('form').style.display='none';
+    document.getElementById('done').style.display='block';
+    window.scrollTo({top:0, behavior:'smooth'});
+  }catch(err){
+    console.error(err);
+    btn.disabled=false; btn.textContent='Send my brief';
+    alert('Something went wrong sending your brief. Please try again, or message me directly.');
+  }
+});
+</script>
+</body>
+</html>
